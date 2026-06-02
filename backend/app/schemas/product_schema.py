@@ -5,14 +5,16 @@ class ProductCreate(BaseModel):
 
     name: str
 
-    description: str
+    price: float
 
-    price: int
+    description: str
 
     image: str
 
-    rating: float = 0
+    rating: float
 
-    review: str = ""
+    review: str
 
-    category: str = ""
+    category: str
+
+    stock: int

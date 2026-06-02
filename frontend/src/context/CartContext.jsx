@@ -11,6 +11,13 @@ function CartProvider({ children }) {
 
   const addToCart = (product) => {
 
+    if (product.stock <= 0) {
+
+      alert("Out Of Stock");
+
+      return;
+    }
+
     const existingItem = cartItems.find(
       (item) => item.id === product.id
     );

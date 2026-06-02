@@ -16,6 +16,7 @@ function EditProduct() {
       rating: "",
       review: "",
       category: "",
+      stock: "",
     });
 
   const handleChange = (e) => {
@@ -35,7 +36,12 @@ function EditProduct() {
 
       const response = await API.put(
         `/update-product/${productId}`,
-        formData
+        {
+          ...formData,
+          price: Number(formData.price),
+          rating: Number(formData.rating),
+          stock: Number(formData.stock),
+        }
       );
 
       alert(response.data.message);
@@ -133,7 +139,6 @@ function EditProduct() {
             onChange={handleChange}
             className="w-full border border-gray-300 rounded-lg px-4 py-3"
           >
-
             <option value="">
               Select Category
             </option>
@@ -157,8 +162,16 @@ function EditProduct() {
             <option value="Bakery">
               Bakery
             </option>
-
           </select>
+
+          <input
+            type="number"
+            name="stock"
+            placeholder="Available Stock"
+            value={formData.stock}
+            onChange={handleChange}
+            className="w-full border border-gray-300 rounded-lg px-4 py-3"
+          />
 
           <button
             type="submit"

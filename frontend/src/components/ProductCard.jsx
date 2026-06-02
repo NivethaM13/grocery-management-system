@@ -1,9 +1,9 @@
 import { useContext } from "react";
 
 import { CartContext } from "../context/CartContext";
-
 import { WishlistContext } from "../context/WishlistContext";
 
+import toast from "react-hot-toast";
 import API from "../services/api";
 
 function ProductCard({
@@ -14,7 +14,8 @@ function ProductCard({
   description,
   rating,
   review,
-  category
+  category,
+  stock
 }) {
 
   const { addToCart } =
@@ -31,7 +32,8 @@ function ProductCard({
     description,
     rating,
     review,
-    category
+    category,
+    stock
   };
 
   const handleDelete = async () => {
@@ -42,7 +44,7 @@ function ProductCard({
         `/delete-product/${id}`
       );
 
-      alert("Product deleted");
+      toast.success("Product deleted");
 
       window.location.reload();
 
@@ -50,25 +52,26 @@ function ProductCard({
 
       console.log(error);
 
-      alert("Delete failed");
+      toast.error("Delete failed");
 
     }
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-md p-4 hover:shadow-xl transition">
+
+    <div className="bg-white dark:bg-gray-700 dark:text-white rounded-2xl shadow-md p-4 hover:shadow-xl transition">
 
       <img
         src={image}
         alt={name}
-        className="w-full h-48 object-cover rounded-xl"
+        className="w-full h-40 sm:h-48 object-cover rounded-xl"
       />
 
       <h2 className="text-xl font-bold mt-4">
         {name}
       </h2>
 
-      <p className="text-gray-600 mt-2">
+      <p className="text-gray-600 dark:text-gray-300 mt-2">
         {description}
       </p>
 
@@ -76,12 +79,16 @@ function ProductCard({
         ⭐ {rating}
       </p>
 
-      <p className="text-gray-500 italic mt-1">
+      <p className="text-gray-500 dark:text-gray-400 italic mt-1">
         {review}
       </p>
 
-      <p className="text-sm text-blue-600 mt-2">
+      <p className="text-sm text-blue-600 dark:text-blue-400 mt-2">
         {category}
+      </p>
+
+      <p className="text-sm mt-2 font-semibold text-red-500">
+        Stock: {stock || 0}
       </p>
 
       <div className="flex justify-between items-center mt-4">
@@ -96,9 +103,16 @@ function ProductCard({
 
         <button
           onClick={() => addToCart(product)}
-          className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 w-full"
+          disabled={stock <= 0}
+          className={`px-4 py-2 rounded-lg w-full text-white ${
+            stock <= 0
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-green-600 hover:bg-green-700"
+          }`}
         >
-          Add to Cart
+          {stock <= 0
+            ? "Out Of Stock"
+            : "Add To Cart"}
         </button>
 
         <button
@@ -108,19 +122,21 @@ function ProductCard({
           ❤️
         </button>
 
-       {localStorage.getItem("token") && (
+        {localStorage.getItem("is_admin") === "true" && (
 
-        <button
+          <button
             onClick={handleDelete}
             className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
-         >
-             Delete
-           </button>
+          >
+            Delete
+          </button>
 
-)}
+        )}
+
       </div>
 
     </div>
+
   );
 }
 

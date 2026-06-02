@@ -22,3 +22,5 @@ class Product(Base):
     review = Column(String(500), default="")
 
     category = Column(String(100), default="")
+
+    stock = Column(Integer, default=0)

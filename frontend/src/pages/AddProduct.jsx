@@ -10,6 +10,9 @@ function AddProduct() {
     price: "",
     image: "",
     category: "",
+    stock: "",
+    rating: "",
+    review: "",
   });
 
   const handleChange = (e) => {
@@ -40,6 +43,9 @@ function AddProduct() {
         price: "",
         image: "",
         category: "",
+        stock: "",
+        rating: "",
+        review: "",
       });
 
     } catch (error) {
@@ -52,6 +58,7 @@ function AddProduct() {
   };
 
   return (
+
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-10">
 
       <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-lg">
@@ -132,6 +139,33 @@ function AddProduct() {
             </option>
 
           </select>
+
+          <input
+            type="number"
+            name="rating"
+            placeholder="Rating"
+            value={formData.rating}
+            onChange={handleChange}
+            className="w-full border border-gray-300 rounded-lg px-4 py-3"
+          />
+
+          <input
+            type="text"
+            name="review"
+            placeholder="Review"
+            value={formData.review}
+            onChange={handleChange}
+            className="w-full border border-gray-300 rounded-lg px-4 py-3"
+          />
+
+          <input
+            type="number"
+            name="stock"
+            placeholder="Available Stock"
+            value={formData.stock}
+            onChange={handleChange}
+            className="w-full border border-gray-300 rounded-lg px-4 py-3"
+          />
 
           <button
             type="submit"

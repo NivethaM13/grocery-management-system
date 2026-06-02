@@ -32,6 +32,11 @@ function Login() {
          response.data.access_token
          );
 
+         localStorage.setItem(
+         "is_admin",
+          response.data.user.is_admin
+        );
+
       console.log(response.data);
 
     } catch (error) {

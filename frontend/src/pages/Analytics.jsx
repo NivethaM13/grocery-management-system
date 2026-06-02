@@ -1,3 +1,13 @@
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer
+} from "recharts";
+
+
 import { useEffect, useState } from "react";
 
 import API from "../services/api";
@@ -43,6 +53,25 @@ function Analytics() {
 
     0
   );
+
+  const data = [
+
+  {
+    name: "Products",
+    value: products.length
+  },
+
+  {
+    name: "Orders",
+    value: orders.length
+  },
+
+  {
+    name: "Revenue",
+    value: totalRevenue
+  }
+
+];
 
   return (
     <div className="min-h-screen bg-gray-100 p-10">
@@ -90,6 +119,31 @@ function Analytics() {
         </div>
 
       </div>
+      <div className="bg-white p-6 rounded-2xl shadow-lg mt-10">
+
+  <ResponsiveContainer
+    width="100%"
+    height={400}
+  >
+
+    <BarChart data={data}>
+
+      <XAxis dataKey="name" />
+
+      <YAxis />
+
+      <Tooltip />
+
+      <Bar
+        dataKey="value"
+        fill="#16a34a"
+      />
+
+    </BarChart>
+
+  </ResponsiveContainer>
+
+</div>
 
     </div>
   );

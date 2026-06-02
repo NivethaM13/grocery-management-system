@@ -1,7 +1,5 @@
 import { useState, useContext } from "react";
-
 import API from "../services/api";
-
 import { CartContext } from "../context/CartContext";
 
 function Checkout() {
@@ -10,12 +8,44 @@ function Checkout() {
 
   const [formData, setFormData] = useState({
     customer_name: "",
+    delivery_slot: "",
   });
+
+  const [couponCode, setCouponCode] = useState("");
+  const [discount, setDiscount] = useState(0);
+  const [finalAmount, setFinalAmount] = useState(0);
 
   const totalAmount = cartItems.reduce(
     (total, item) => total + item.price,
     0
   );
+
+  const applyCoupon = async () => {
+
+    try {
+
+      const response = await API.post(
+        `/apply-coupon/${couponCode}`,
+        null,
+        {
+          params: {
+            order_amount: totalAmount
+          }
+        }
+      );
+
+      setDiscount(response.data.discount || 0);
+      setFinalAmount(response.data.final_amount || totalAmount);
+
+      alert("Coupon Applied Successfully");
+
+    } catch (error) {
+
+      console.log(error);
+      alert("Invalid Coupon");
+
+    }
+  };
 
   const handleChange = (e) => {
 
@@ -33,15 +63,12 @@ function Checkout() {
       for (const item of cartItems) {
 
         await API.post("/create-order", {
-
           customer_name: formData.customer_name,
-
           product_name: item.name,
-
           amount: item.price,
-
           status: "Pending",
-
+          email: "nivethamahalingam123@gmail.com",
+          delivery_slot: formData.delivery_slot,
         });
 
       }
@@ -51,7 +78,6 @@ function Checkout() {
     } catch (error) {
 
       console.log(error);
-
       alert("Failed to place order");
 
     }
@@ -66,7 +92,6 @@ function Checkout() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
 
-        {/* Delivery Address */}
         <div className="bg-white p-8 rounded-2xl shadow-md">
 
           <h2 className="text-2xl font-bold mb-6">
@@ -84,11 +109,34 @@ function Checkout() {
               className="w-full border border-gray-300 rounded-lg px-4 py-3"
             />
 
+            <select
+              name="delivery_slot"
+              value={formData.delivery_slot}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded-lg px-4 py-3"
+            >
+              <option value="">
+                Select Delivery Slot
+              </option>
+
+              <option value="Morning">
+                Morning (09:00 AM - 12:00 PM)
+              </option>
+
+              <option value="Afternoon">
+                Afternoon (12:00 PM - 04:00 PM)
+              </option>
+
+              <option value="Evening">
+                Evening (04:00 PM - 08:00 PM)
+              </option>
+
+            </select>
+
           </div>
 
         </div>
 
-        {/* Order Summary */}
         <div className="bg-white p-8 rounded-2xl shadow-md">
 
           <h2 className="text-2xl font-bold mb-6">
@@ -110,16 +158,38 @@ function Checkout() {
 
           ))}
 
+          <input
+            type="text"
+            placeholder="Enter Coupon Code"
+            value={couponCode}
+            onChange={(e) => setCouponCode(e.target.value)}
+            className="w-full border border-gray-300 rounded-lg px-4 py-3 mt-4"
+          />
+
+          <button
+            onClick={applyCoupon}
+            className="w-full bg-blue-600 text-white py-3 rounded-lg mt-3"
+          >
+            Apply Coupon
+          </button>
+
           <hr className="my-4" />
 
-          <div className="flex justify-between text-2xl font-bold">
+          <div className="flex justify-between">
+            <p>Total Amount</p>
+            <p>₹{totalAmount}</p>
+          </div>
 
-            <p>Total</p>
+          <div className="flex justify-between text-red-500 mt-2">
+            <p>Discount</p>
+            <p>₹{discount}</p>
+          </div>
 
+          <div className="flex justify-between text-2xl font-bold mt-4">
+            <p>Final Amount</p>
             <p className="text-green-600">
-              ₹{totalAmount}
+              ₹{finalAmount || totalAmount}
             </p>
-
           </div>
 
           <button

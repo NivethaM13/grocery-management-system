@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const handleLogout = () => {
 
@@ -9,6 +9,8 @@ const handleLogout = () => {
 
 function Navbar() {
 
+  const navigate = useNavigate();
+
   return (
 
     <nav className="bg-green-600 text-white px-8 py-4 flex justify-between items-center">
@@ -17,7 +19,14 @@ function Navbar() {
         Grocery Store
       </h1>
 
-      <div className="flex gap-6 items-center">
+      <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+
+        <button
+          onClick={() => navigate(-1)}
+          className="bg-white text-green-600 px-3 py-1 rounded-lg"
+        >
+          Back
+        </button>
 
         <Link to="/">Home</Link>
 
@@ -34,9 +43,33 @@ function Navbar() {
         </Link>
 
         <Link to="/analytics">
-           Analytics
+          Analytics
         </Link>
 
+        <Link to="/suppliers">
+            Suppliers
+        </Link>
+
+        <Link to="/promotions">
+           Promotions
+        </Link>
+
+        <Link to="/coupons">
+           Coupons
+        </Link>
+
+        <Link to="/rewards">
+            Rewards
+        </Link>
+
+         <Link to="/returns">
+           Returns
+         </Link>
+
+         <Link to="/delivery-slots">
+             Delivery Slots
+        </Link>
+         
         <Link to="/order-history">
           Order History
         </Link>
@@ -45,9 +78,8 @@ function Navbar() {
           Add Product
         </Link>
 
-
         <Link to="/edit-product">
-            Edit Product
+          Edit Product
         </Link>
 
         <Link to="/login">

@@ -1,9 +1,16 @@
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, declarative_base
 
-DATABASE_URL = "mysql+pymysql://root:Root%401363@localhost/grocery_db"
+from sqlalchemy.ext.declarative import declarative_base
 
-engine = create_engine(DATABASE_URL)
+from sqlalchemy.orm import sessionmaker
+
+
+SQLALCHEMY_DATABASE_URL = "mysql+pymysql://root:Root%401363@localhost/grocery_db"
+
+
+engine = create_engine(
+    SQLALCHEMY_DATABASE_URL
+)
 
 SessionLocal = sessionmaker(
     autocommit=False,

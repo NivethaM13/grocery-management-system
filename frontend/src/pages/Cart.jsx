@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 
 import { CartContext } from "../context/CartContext";
 
@@ -12,6 +12,10 @@ function Cart() {
     decreaseQuantity,
   } = useContext(CartContext);
 
+  const [couponCode, setCouponCode] = useState("");
+
+  const [couponDiscount, setCouponDiscount] = useState(0);
+
   const totalPrice = cartItems.reduce(
 
     (total, item) =>
@@ -20,6 +24,28 @@ function Cart() {
 
     0
   );
+
+  const discount =
+    totalPrice >= 100
+      ? totalPrice * 0.10
+      : 0;
+
+  const finalAmount =
+    totalPrice - discount - couponDiscount;
+
+  const applyCoupon = () => {
+
+    if (couponCode === "NEWUSER10") {
+
+      setCouponDiscount(
+        totalPrice * 0.10
+      );
+
+    } else {
+
+      alert("Invalid Coupon");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 p-10">
@@ -99,15 +125,48 @@ function Cart() {
 
           <div className="bg-white p-6 rounded-2xl shadow-md mt-10">
 
+            <div className="mb-6">
+
+              <input
+                type="text"
+                placeholder="Enter Coupon Code"
+                value={couponCode}
+                onChange={(e) =>
+                  setCouponCode(e.target.value)
+                }
+                className="w-full border border-gray-300 rounded-lg px-4 py-3"
+              />
+
+              <button
+                onClick={applyCoupon}
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg mt-3"
+              >
+                Apply Coupon
+              </button>
+
+            </div>
+
             <div className="flex justify-between items-center">
 
               <h2 className="text-3xl font-bold">
                 Total
               </h2>
 
-              <p className="text-3xl font-bold text-green-600">
-                ₹{totalPrice}
-              </p>
+              <div className="text-right">
+
+                <p className="text-lg text-red-500">
+                  Discount: ₹{discount}
+                </p>
+
+                <p className="text-lg text-blue-600">
+                  Coupon Discount: ₹{couponDiscount}
+                </p>
+
+                <p className="text-3xl font-bold text-green-600">
+                  ₹{finalAmount}
+                </p>
+
+              </div>
 
             </div>
 

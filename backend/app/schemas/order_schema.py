@@ -7,6 +7,10 @@ class OrderCreate(BaseModel):
 
     product_name: str
 
-    amount: int
+    amount: float
 
     status: str
+
+    email: str
+
+    delivery_slot: str
