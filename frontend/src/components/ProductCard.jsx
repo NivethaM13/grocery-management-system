@@ -3,9 +3,6 @@ import { useContext } from "react";
 import { CartContext } from "../context/CartContext";
 import { WishlistContext } from "../context/WishlistContext";
 
-import toast from "react-hot-toast";
-import API from "../services/api";
-
 function ProductCard({
   id,
   image,
@@ -34,27 +31,6 @@ function ProductCard({
     review,
     category,
     stock
-  };
-
-  const handleDelete = async () => {
-
-    try {
-
-      await API.delete(
-        `/delete-product/${id}`
-      );
-
-      toast.success("Product deleted");
-
-      window.location.reload();
-
-    } catch (error) {
-
-      console.log(error);
-
-      toast.error("Delete failed");
-
-    }
   };
 
   return (
@@ -121,17 +97,6 @@ function ProductCard({
         >
           ❤️
         </button>
-
-        {localStorage.getItem("is_admin") === "true" && (
-
-          <button
-            onClick={handleDelete}
-            className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
-          >
-            Delete
-          </button>
-
-        )}
 
       </div>
 

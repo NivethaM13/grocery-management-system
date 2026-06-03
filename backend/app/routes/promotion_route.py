@@ -50,3 +50,59 @@ def get_promotions():
     finally:
 
         db.close()
+
+
+
+@router.delete("/delete-promotion/{promotion_id}")
+def delete_promotion(promotion_id: int):
+
+    db = SessionLocal()
+
+    try:
+
+        promotion = db.query(Promotion).filter(
+            Promotion.id == promotion_id
+        ).first()
+
+        if not promotion:
+            return {"message": "Promotion not found"}
+
+        db.delete(promotion)
+
+        db.commit()
+
+        return {"message": "Promotion deleted successfully"}
+
+    finally:
+
+        db.close() 
+
+
+@router.put("/update-promotion/{promotion_id}")
+def update_promotion(
+    promotion_id: int,
+    promotion: PromotionCreate
+):
+
+    db = SessionLocal()
+
+    try:
+
+        existing = db.query(Promotion).filter(
+            Promotion.id == promotion_id
+        ).first()
+
+        if not existing:
+            return {"message": "Promotion not found"}
+
+        existing.title = promotion.title
+        existing.discount = promotion.discount
+        existing.status = promotion.status
+
+        db.commit()
+
+        return {"message": "Promotion updated successfully"}
+
+    finally:
+
+        db.close()   
